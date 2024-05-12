@@ -1,0 +1,39 @@
+//TECN347J JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),NOTIFY=&SYSUID         00020001
+//************************PRE-DELETION**********************************00021004
+//STEP01   EXEC PGM=IEFBR14                                             00030001
+//DD1      DD DSN=TECN347.PROJECT.QLY.PS,                               00040001
+//            DISP=(MOD,DELETE,DELETE),                                 00041001
+//            SPACE=(TRK,(2,2),RLSE),                                   00050001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00060003
+//DD2      DD DSN=TECN347.PROJECT.YEARLY.PS,                            00070001
+//            DISP=(MOD,DELETE,DELETE),                                 00071001
+//            SPACE=(TRK,(2,2),RLSE),                                   00080001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00090003
+//DD3      DD DSN=TECN347.PROJECT.MONTHLY.PS,                           00100001
+//            DISP=(MOD,DELETE,DELETE),                                 00101001
+//            SPACE=(TRK,(2,2),RLSE),                                   00110001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00120003
+//*******************SPLITTING FILES BASED ON TERM**********************00130001
+//STEP02   EXEC PGM=SORT                                                00140001
+//SYSPRINT DD SYSOUT=*                                                  00150001
+//SYSOUT   DD SYSOUT=*                                                  00160001
+//SORTIN   DD DSN=TECN347.PROJECT.INP1POL.PS,DISP=SHR                   00170002
+//SORTOF01 DD DSN=TECN347.PROJECT.QLY.PS,                               00180001
+//            DISP=(NEW,CATLG,DELETE),                                  00181001
+//            SPACE=(TRK,(2,2),RLSE),                                   00190001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00200003
+//SORTOF02 DD DSN=TECN347.PROJECT.YEARLY.PS,                            00210001
+//            DISP=(NEW,CATLG,DELETE),                                  00211001
+//            SPACE=(TRK,(2,2),RLSE),                                   00220001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00230003
+//SORTOF03 DD DSN=TECN347.PROJECT.MONTHLY.PS,                           00240001
+//            DISP=(NEW,CATLG,DELETE),                                  00241001
+//            SPACE=(TRK,(2,2),RLSE),                                   00250001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00260001
+//SYSIN    DD *                                                         00270001
+       SORT FIELDS=(1,5,CH,A,7,10,CH,A)                                 00280001
+       OUTFIL FILES=01,INCLUDE=(55,7,CH,EQ,C'QLY')                      00290001
+       OUTFIL FILES=02,INCLUDE=(55,7,CH,EQ,C'YEARLY')                   00300001
+       OUTFIL FILES=03,INCLUDE=(55,7,CH,EQ,C'MONTHLY')                  00310001
+/*                                                                      00320001
+
