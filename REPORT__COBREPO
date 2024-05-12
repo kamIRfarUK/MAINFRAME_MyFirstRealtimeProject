@@ -1,0 +1,307 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. COBREPO.                                             00020003
+       AUTHOR. KAMIR.                                                   00030002
+       DATE-WRITTEN. 22-02-2024.                                        00040000
+       DATE-COMPILED. 22-02-2024.                                       00050000
+                                                                        00060000
+      *************************PROGRAM DESCRIPTION**********************00070000
+      *DESCRIPTION :  A DETAILED REPORT OF OUTPUT HISTORY               00080000
+      *               DATABASE TABLE.                                   00090000
+      ******************************************************************00100000
+                                                                        00110000
+       ENVIRONMENT DIVISION.                                            00120000
+       CONFIGURATION SECTION.                                           00130000
+       INPUT-OUTPUT SECTION.                                            00140000
+       FILE-CONTROL.                                                    00150000
+                                                                        00160000
+      ******************************************************************00170000
+      *                SELECT THE OUTPUT FILE                           00180000
+      ******************************************************************00190000
+                                                                        00200000
+              SELECT TO001-REPORT ASSIGN TO DD1                         00210000
+              ORGANIZATION IS SEQUENTIAL                                00220000
+              ACCESS MODE IS SEQUENTIAL                                 00230000
+              FILE STATUS IS WS-I-FS1.                                  00240000
+                                                                        00250000
+      ******************************************************************00260000
+       DATA DIVISION.                                                   00270000
+       FILE SECTION.                                                    00280000
+                                                                        00290000
+       FD TO001-REPORT                                                  00300000
+              RECORD CONTAINS 80 CHARACTERS                             00310000
+              RECORDING MODE IS F.                                      00320000
+       01 TO001-REPORT-REC                 PIC X(80).                   00330000
+      ******************************************************************00340000
+       WORKING-STORAGE SECTION.                                         00350000
+                                                                        00360000
+       01 WS-FILE-STATUS.                                               00370000
+          05 WS-I-FS1                      PIC 9(02).                   00380000
+             88 C01-FS-SUCCESS             VALUE 00.                    00390000
+       01 WS-SQL-CODE.                                                  00400000
+          05 WS-SQLCODE                    PIC S9(03)                   00410000
+                                           SIGN LEADING SEPARATE.       00420000
+             88 SQL-SUCCESS                VALUE 000.                   00430000
+             88 SQL-ROW-NOTFND             VALUE +100.                  00440000
+                                                                        00450000
+       01 WS-DASH-LINE.                                                 00460000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00470000
+          05 FILLER                        PIC X(09) VALUE ALL '-'.     00480000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00490000
+          05 FILLER                        PIC X(08) VALUE ALL '-'.     00500000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00510000
+          05 FILLER                        PIC X(09) VALUE ALL '-'.     00520000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00530000
+          05 FILLER                        PIC X(10) VALUE ALL '-'.     00540000
+          05 FILLER                        PIC X(24) VALUE SPACES.      00550000
+                                                                        00560000
+       01 WS-HEADER-LINE.                                               00570000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00580000
+          05 FILLER                        PIC X(09) VALUE              00590000
+                                                    'POLICY ID'.        00600000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00610000
+          05 FILLER                        PIC X(11) VALUE              00620000
+                                                    'POLICY CODE'.      00630000
+          05 FILLER                        PIC X(02) VALUE SPACES.      00640000
+          05 FILLER                        PIC X(11) VALUE              00650000
+                                                    'POLICY TYPE'.      00660000
+          05 FILLER                        PIC X(03) VALUE SPACES.      00670000
+          05 FILLER                        PIC X(11) VALUE              00680000
+                                                    'POLICY TERM'.      00690000
+          05 FILLER                        PIC X(29) VALUE SPACES.      00700000
+                                                                        00710000
+       01 WS-DETAIL-LINE.                                               00720000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00730000
+          05 WS-POLICY-ID                  PIC X(05).                   00740000
+          05 FILLER                        PIC X(09) VALUE SPACES.      00750000
+          05 WS-POLICY-CODE                PIC X(10).                   00760000
+          05 FILLER                        PIC X(03) VALUE SPACES.      00770000
+          05 WS-POLICY-TYPE                PIC X(10).                   00780000
+          05 FILLER                        PIC X(04) VALUE SPACES.      00790000
+          05 WS-POLICY-TERM                PIC X(07).                   00800000
+          05 FILLER                        PIC X(27) VALUE SPACES.      00810000
+                                                                        00820000
+       01 WS-TRAILER-PAGE-LINE.                                         00830000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00840000
+          05 FILLER                        PIC X(15) VALUE ALL '*'.     00850000
+          05 LINE-NAME                     PIC X(11) VALUE              00860000
+                                                    'END OF PAGE'.      00870000
+          05 FILLER                        PIC X(14) VALUE ALL '*'.     00880000
+          05 FILLER                        PIC X(15) VALUE SPACES.      00890000
+          05 FILLER                        PIC X(20) VALUE SPACES.      00900000
+                                                                        00910000
+       01 WS-TRAILER-LINE.                                              00920000
+          05 FILLER                        PIC X(05) VALUE SPACES.      00930000
+          05 FILLER                        PIC X(15) VALUE ALL '*'.     00940000
+          05 LINE-NAME                     PIC X(13) VALUE              00950000
+                                                    'END OF REPORT'.    00960000
+          05 FILLER                        PIC X(14) VALUE ALL '*'.     00970000
+          05 FILLER                        PIC X(13) VALUE SPACES.      00980000
+          05 FILLER                        PIC X(20) VALUE SPACES.      00990000
+                                                                        01000000
+       01 WS-TITLE.                                                     01010000
+          05 FILLER PIC X(19) VALUE SPACES.                             01020000
+          05 TITLE-NAME                    PIC X(31)                    01030000
+                       VALUE 'MEDICAL INSURANCE DETAIL REPORT'.         01040000
+          05 FILLER                        PIC X(30) VALUE SPACES.      01050000
+                                                                        01060000
+       01 WS-EOT                           PIC X(01).                   01070000
+                                                                        01080000
+       01 WS-HEADER-01.                                                 01090000
+          05 DATE-NAME                     PIC X(06) VALUE 'DATE :'.    01100000
+          05 WS-DATE                       PIC X(08).                   01110000
+          05 FILLER                        PIC X(32) VALUE SPACES.      01120000
+          05 PAGE-1                        PIC X(10) VALUE 'PAGE :'.    01130000
+          05 PAGE-NUM                      PIC 9(02) VALUE 01.          01140000
+          05 FILLER                        PIC X(22) VALUE SPACES.      01150000
+                                                                        01160000
+       01 WS-HEADER-02.                                                 01170000
+          05 TIME-NAME                     PIC X(06) VALUE 'TIME :'.    01180000
+          05 WS-TIME.                                                   01190000
+          07 WS-HH                         PIC 9(02).                   01200000
+          07 FILLER                        PIC X(01) VALUE ':'.         01210000
+          07 WS-MM                         PIC 9(02).                   01220000
+          07 FILLER                        PIC X(01) VALUE ':'.         01230000
+          07 WS-SS                         PIC 9(02).                   01240000
+          05 FILLER                        PIC X(32) VALUE SPACES.      01250000
+          05 REPORT-ID                     PIC X(10) VALUE              01260000
+                                                    'REPORT ID:'.       01270000
+          05 REPORT-1                      PIC 9(04) VALUE 1001.        01280000
+          05 FILLER                        PIC X(20) VALUE SPACES.      01290000
+                                                                        01300000
+       01 WS-EMPTY.                                                     01310000
+          05 FILLER                        PIC X(80) VALUE ALL ' '.     01320000
+                                                                        01330000
+       01 WS-COUNTER.                                                   01340000
+          05 LINE-CTR                      PIC 9(02) VALUE ZEROS.       01350000
+          05 READ-CTR                      PIC 9(02) VALUE ZEROS.       01360000
+                     EXEC SQL                                           01370000
+                      INCLUDE INSUR                                     01380000
+                     END-EXEC.                                          01390000
+                     EXEC SQL                                           01400000
+                      INCLUDE SQLCA                                     01410000
+                     END-EXEC.                                          01420000
+                     EXEC SQL                                           01430000
+                     DECLARE CS CURSOR FOR                              01440000
+                        SELECT POLICY_ID,                               01450000
+                               POLICY_CODE,                             01460000
+                               POLICY_TYPE,                             01470000
+                               POLICY_TERM                              01480000
+                        FROM INSURANCE_POLICY                           01490000
+                     END-EXEC.                                          01500000
+       PROCEDURE DIVISION.                                              01510000
+      ******************************************************************01520000
+       0000-MAIN-PARA.                                                  01530000
+      ******************************************************************01540000
+                  PERFORM 1000-INITIALIZATION-PARA THRU                 01550000
+                          1000-INITIALIZATION-PARA-EXIT.                01560000
+                  PERFORM 2000-PROCESS-PARA THRU                        01570000
+                          2000-PROCESS-PARA-EXIT.                       01580000
+                  PERFORM 9000-TERMINATE-PARA THRU                      01590000
+                          9000-TERMINATE-PARA-EXIT.                     01600000
+       0000-MAIN-PARA-EXIT.                                             01610000
+             EXIT.                                                      01620000
+      ******************************************************************01630000
+       1000-INITIALIZATION-PARA.                                        01640000
+      ******************************************************************01650000
+                  DISPLAY '*** REPORT PGM IS INTIALIZED ***'.           01660000
+       1000-INITIALIZATION-PARA-EXIT.                                   01670000
+             EXIT.                                                      01680000
+      ******************************************************************01690000
+       2000-PROCESS-PARA.                                               01700000
+      ******************************************************************01710000
+                  PERFORM 2100-OPEN-FILES-PARA THRU                     01720000
+                          2100-OPEN-FILES-PARA-EXIT.                    01730000
+                  PERFORM 2200-PROCESS-CURSOR-PARA THRU                 01740000
+                          2200-PROCESS-CURSOR-PARA-EXIT.                01750000
+       2000-PROCESS-PARA-EXIT.                                          01760000
+            EXIT.                                                       01770000
+      ******************************************************************01780000
+       2100-OPEN-FILES-PARA.                                            01790000
+                 OPEN OUTPUT TO001-REPORT                               01800000
+                 EVALUATE TRUE                                          01810000
+                  WHEN C01-FS-SUCCESS                                   01820000
+                    DISPLAY '*** REPORT FILE IS OPENED ***'             01830000
+                    WRITE TO001-REPORT-REC FROM WS-TITLE                01840000
+                    WRITE TO001-REPORT-REC FROM WS-EMPTY                01850000
+                  WHEN OTHER                                            01860000
+                    DISPLAY '***ERROR OPENING REPORT FILE ***'          01870000
+                    DISPLAY '***FILE STATUS IS ' WS-I-FS1               01880000
+                END-EVALUATE.                                           01890000
+       2100-OPEN-FILES-PARA-EXIT.                                       01900000
+            EXIT.                                                       01910000
+      ***************************************************************   01920000
+       2200-PROCESS-CURSOR-PARA.                                        01930000
+      ***************************************************************   01940000
+               EXEC SQL OPEN CS END-EXEC.                               01950000
+                  MOVE SQLCODE TO WS-SQLCODE                            01960000
+                 EVALUATE TRUE                                          01970000
+                   WHEN SQL-SUCCESS                                     01980000
+                DISPLAY 'CS CURSOR IS OPENED'                           01990000
+                  PERFORM 2300-FETCH-CURSOR-PARA THRU                   02000000
+                          2300-FETCH-CURSOR-PARA-EXIT                   02010000
+                   WHEN OTHER                                           02020000
+                   DISPLAY 'ERROR OPENING CS CURSOR'                    02030000
+                   DISPLAY 'SQLCODE IS ' WS-SQLCODE                     02040000
+                      CALL 'DSNTIAR' USING SQLCA                        02050000
+                        PERFORM 9000-TERMINATE-PARA THRU                02060000
+                                9000-TERMINATE-PARA-EXIT                02070000
+                   END-EVALUATE.                                        02080000
+       2200-PROCESS-CURSOR-PARA-EXIT.                                   02090000
+               EXIT.                                                    02100000
+      ***************************************************************   02110000
+       2300-FETCH-CURSOR-PARA.                                          02120000
+      ***************************************************************   02130000
+                   PERFORM UNTIL WS-EOT = 'Y'                           02140000
+                     EXEC SQL FETCH CS INTO                             02150000
+                        :HV1-POLICY-ID,                                 02160000
+                        :HV1-POLICY-CODE,                               02170000
+                        :HV1-POLICY-TYPE,                               02180000
+                        :HV1-POLICY-TERM                                02190000
+                     END-EXEC                                           02200000
+                     MOVE SQLCODE TO WS-SQLCODE                         02210000
+                       EVALUATE TRUE                                    02220000
+                          WHEN SQL-SUCCESS                              02230000
+                           ADD 1 TO LINE-CTR                            02240000
+                           ADD 1 TO READ-CTR                            02250000
+                              PERFORM 2400-WRITE-RECORD-PARA THRU       02260000
+                                      2400-WRITE-RECORD-PARA-EXIT       02270000
+                     WHEN SQL-ROW-NOTFND                                02280000
+                       MOVE 'Y' TO WS-EOT                               02290000
+                    DISPLAY 'NO MORE RECORDS IN THE CURSOR'             02300000
+                     WRITE TO001-REPORT-REC FROM WS-EMPTY               02310000
+                      WRITE TO001-REPORT-REC FROM WS-TRAILER-LINE       02320000
+                         PERFORM 8000-CLOSE-CURSOR-PARA THRU            02330000
+                                 8000-CLOSE-CURSOR-PARA-EXIT            02340000
+                    WHEN OTHER                                          02350000
+                    DISPLAY 'ERROR OPENING CS CURSOR'                   02360000
+                      DISPLAY 'SQLCODE IS ' WS-SQLCODE                  02370000
+                      CALL 'DSNTIAR' USING SQLCA                        02380000
+                         PERFORM 9000-TERMINATE-PARA THRU               02390000
+                                 9000-TERMINATE-PARA-EXIT               02400000
+                    END-EVALUATE                                        02410000
+                    END-PERFORM.                                        02420000
+       2300-FETCH-CURSOR-PARA-EXIT.                                     02430000
+               EXIT.                                                    02440000
+      ******************************************************************02450000
+       2400-WRITE-RECORD-PARA.                                          02460000
+      ******************************************************************02470000
+                IF LINE-CTR = 1                                         02480000
+                  WRITE TO001-REPORT-REC            FROM WS-EMPTY       02490000
+                   MOVE FUNCTION CURRENT-DATE(1:8)  TO WS-DATE          02500000
+                   MOVE FUNCTION CURRENT-DATE(9:2)  TO WS-HH            02510000
+                   MOVE FUNCTION CURRENT-DATE(11:2) TO WS-MM            02520000
+                   MOVE FUNCTION CURRENT-DATE(13:2) TO WS-SS            02530000
+                        WRITE TO001-REPORT-REC     FROM WS-HEADER-01    02540000
+                        WRITE TO001-REPORT-REC     FROM WS-HEADER-02    02550000
+                        WRITE TO001-REPORT-REC     FROM WS-EMPTY        02560000
+                        WRITE TO001-REPORT-REC     FROM WS-HEADER-LINE  02570000
+                        WRITE TO001-REPORT-REC     FROM WS-DASH-LINE    02580000
+                END-IF.                                                 02590000
+                    MOVE SPACES TO WS-DETAIL-LINE                       02600000
+                    MOVE HV1-POLICY-ID    TO WS-POLICY-ID               02610000
+                    MOVE HV1-POLICY-CODE  TO WS-POLICY-CODE             02620000
+                    MOVE HV1-POLICY-TYPE  TO WS-POLICY-TYPE             02630000
+                    MOVE HV1-POLICY-TERM  TO WS-POLICY-TERM             02640000
+                       WRITE TO001-REPORT-REC  FROM WS-DETAIL-LINE      02650000
+                IF LINE-CTR >= 5                                        02660004
+                   ADD 1 TO PAGE-NUM                                    02670000
+                   MOVE ZEROS TO LINE-CTR                               02680000
+                      WRITE TO001-REPORT-REC FROM WS-EMPTY              02690000
+                      WRITE TO001-REPORT-REC FROM WS-TRAILER-PAGE-LINE  02700000
+                END-IF.                                                 02710000
+       2400-WRITE-RECORD-PARA-EXIT.                                     02720000
+               EXIT.                                                    02730000
+      ******************************************************************02740000
+       8000-CLOSE-CURSOR-PARA.                                          02750000
+                                                                        02760000
+              EXEC SQL CLOSE CS END-EXEC.                               02770000
+                MOVE SQLCODE TO WS-SQLCODE                              02780000
+               EVALUATE TRUE                                            02790000
+                   WHEN SQL-SUCCESS                                     02800000
+                DISPLAY '|CS CURSOR IS CLOSED |'                        02810000
+                   PERFORM 9000-TERMINATE-PARA THRU                     02820000
+                           9000-TERMINATE-PARA-EXIT                     02830000
+                   WHEN OTHER                                           02840000
+                DISPLAY '|ERROR CLOSING CS CURSOR |'                    02850000
+                   DISPLAY '|SQLCODE IS ' WS-SQLCODE                    02860000
+                   CALL 'DSNTIAR' USING SQLCA                           02870000
+                     PERFORM 9000-TERMINATE-PARA THRU                   02880000
+                             9000-TERMINATE-PARA-EXIT                   02890000
+                   END-EVALUATE.                                        02900000
+       8000-CLOSE-CURSOR-PARA-EXIT.                                     02910000
+                EXIT.                                                   02920000
+      ******************************************************************02930000
+       9000-TERMINATE-PARA.                                             02940000
+      ******************************************************************02950000
+               CLOSE TO001-REPORT.                                      02960000
+                 EVALUATE TRUE                                          02970000
+                   WHEN C01-FS-SUCCESS                                  02980000
+                     DISPLAY '*** REPORT FILE IS CLOSED ***'            02990000
+                   WHEN OTHER                                           03000000
+                     DISPLAY '***ERROR CLOSING REPORT FILE ***'         03010000
+                     DISPLAY '***FILE STATUS IS ' WS-I-FS1              03020000
+                 END-EVALUATE.                                          03030000
+               STOP RUN.                                                03040000
+       9000-TERMINATE-PARA-EXIT.                                        03050000
+               EXIT.                                                    03060000
+
