@@ -1,0 +1,63 @@
+//*DB2COB
+//TECN347C JOB ,,NOTIFY=&SYSUID,CLASS=A,MSGLEVEL=(1,1),MSGCLASS=H       00010002
+//JOBPROC  JCLLIB ORDER=IBMUSER.ALL1                                    00020000
+//EXEC1    EXEC DB2JCL,                                                 00030000
+//         SRCLIB=TECN347.PROJECT.COBOL.PDS,  ==> SOURCE LIB            00040009
+//         DBRMLIB=TECN347.PROJECT.DBRM,      ==> DBRM LIBRARY          00050008
+//         MEM=COBREPO,                       ==> MEMBER NAME           00060027
+//         INCLIB=TECN347.PROJECT.DCLGEN,     ==> DCLGEN LIBRARY        00070008
+//         DCLLIB=TECN347.PROJECT.DCLGEN,     ==> DCLGEN LIBRARY        00080009
+//         COPYLIB=TECN347.PROJECT.COBOL.PDS, ==> SOURCE LIBRARY        00090009
+//         LOADLIB=TECN347.PROJECT.LOADLIB    ==> LOAD LIBRARY          00100008
+
+
+//*DB2BIND
+//TECN347B JOB ,,NOTIFY=&SYSUID,CLASS=A,MSGLEVEL=(1,1),MSGCLASS=H       00010007
+//JOBLIB   DD  DISP=SHR,                                                00020000
+//            DSN=DSN910.DB9G.SDSNEXIT                                  00030007
+//         DD DISP=SHR,                                                 00040000
+//            DSN=DSN910.SDSNLOAD                                       00050007
+//BIND     EXEC PGM=IKJEFT01,DYNAMNBR=20                                00070000
+//DBRMLIB  DD DISP=SHR,                                                 00080000
+//         DSN=TECN347.PROJECT.DBRM       --> DBRM LIBRARY              00090012
+//SYSTSPRT DD SYSOUT=*                                                  00100012
+//SYSPRINT DD SYSOUT=*                                                  00110000
+//SYSUMUMP DD SYSOUT=*                                                  00120000
+//SYSOUT   DD SYSOUT=*                                                  00130000
+//REPORT   DD SYSOUT=*                                                  00140000
+//SYSTSIN  DD *                                                         00150000
+  DSN SYSTEM(DB9G)                                                      00151006
+  BIND PLAN(TECN347P) MEMBER(COBREPO) ISOLATION(CS) ACTION(REP) -       00160030
+  ENCODING(EBCDIC)                                                      00170006
+//*                                                                     00180000
+
+
+
+//*DB2RUN
+//TECN347R JOB ,,NOTIFY=&SYSUID,CLASS=A,MSGLEVEL=(1,1),MSGCLASS=H,      00010004
+//         LINES=(1,CANCEL),PRTY=15                                     00020000
+//JOBLIB   DD  DISP=SHR,                                                00030000
+//            DSN=DSN810.SDSNEXIT                                       00040006
+//         DD DISP=SHR,                                                 00050000
+//            DSN=DSN810.SDSNLOAD                                       00060006
+//         DD DISP=SHR,                                                 00070000
+//            DSN=CEE.SCEERUN                                           00080000
+//PH02CS04 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(4,LT)                    00100000
+//SYSTSPRT DD SYSOUT=*                                                  00110000
+//SYSPRINT DD SYSOUT=*                                                  00120000
+//SYSOUT   DD SYSOUT=*                                                  00130000
+//DD1  DD DSN=TECN347.PROJECT.MEDICAL.REPORT.PS,                        00130138
+//      DISP=(NEW,CATLG,DELETE),                                        00130238
+//      SPACE=(TRK,(1,1)),DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)           00130338
+//*DD1 DD DSN=TECN347.PROJECT.MEDICAL.PS,DISP=SHR                       00131038
+//*DD2 DD DSN=TECN347.PROJECT.INP2AGT.PS,DISP=SHR                       00131138
+//*DD3 DD DSN=TECN347.PROJECT.KSDS,DISP=SHR                             00131238
+//*DD4 DD DSN=TECN347.PROJECT.ERPOL.PS,DISP=OLD                         00131338
+//*DD5 DD DSN=TECN347.PROJECT.ERAGT.PS,DISP=OLD                         00131438
+//SYSIN    DD DUMMY                                                     00140000
+//SYSTSIN  DD *                                                         00150000
+  DSN SYSTEM(DB9G)                                                      00160003
+  RUN PROGRAM(COBREPO) PLAN(TECN347P) LIB('TECN347.PROJECT.LOADLIB')    00170038
+  END                                                                   00180000
+/*                                                                      00190000
+
