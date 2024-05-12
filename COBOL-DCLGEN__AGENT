@@ -1,0 +1,49 @@
+      ******************************************************************
+      * DCLGEN TABLE(AGENT_DETAIL)                                     *
+      *        LIBRARY(TECN347.PROJECT.DCLGEN(AGENT))                  *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(AG-)                                              *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE AGENT_DETAIL TABLE
+           ( AGENT_CODE                     CHAR(5) NOT NULL,
+             AGENT_NAME                     CHAR(10),
+             STREET                         CHAR(20),
+             CITY                           CHAR(20),
+             STATE                          CHAR(20),
+             PIN                            DECIMAL(6,0),
+             PHONE_NO                       CHAR(12),
+             REGN_NO                        CHAR(15),
+             COMMISSION                     DECIMAL(2,0)
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE AGENT_DETAIL                       *
+      ******************************************************************
+       01  DCLAGENT-DETAIL.
+      *                       AGENT_CODE
+           10 AG-AGENT-CODE        PIC X(5).
+      *                       AGENT_NAME
+           10 AG-AGENT-NAME        PIC X(10).
+      *                       STREET
+           10 AG-STREET            PIC X(20).
+      *                       CITY
+           10 AG-CITY              PIC X(20).
+      *                       STATE
+           10 AG-STATE             PIC X(20).
+      *                       PIN
+           10 AG-PIN               PIC S9(6)V USAGE COMP-3.
+      *                       PHONE_NO
+           10 AG-PHONE-NO          PIC X(12).
+      *                       REGN_NO
+           10 AG-REGN-NO           PIC X(15).
+      *                       COMMISSION
+           10 AG-COMMISSION        PIC S9(2)V USAGE COMP-3.
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 9       *
+      * 10 AG-PIN               PIC S9(6)V USAGE COMP-3. DECIMAL(6,0)  *
+      * 10 AG-COMMISSION        PIC S9(2)V USAGE COMP-3  DECIMAL(2,0)  *
+      ******************************************************************
+
