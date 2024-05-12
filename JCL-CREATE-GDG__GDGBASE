@@ -1,0 +1,50 @@
+//TECN347J JOB NOTIFY=&SYSUID                                           00010001
+//STEP01   EXEC PGM=IDCAMS                                              00020001
+//SYSPRINT DD SYSOUT=*                                                  00030001
+//SYSOUT   DD SYSOUT=*                                                  00040001
+//SYSIN    DD *                                                         00050001
+     DEFINE GDG(NAME(TECN347.PROJECT.INP1POL.GDG)-                      00060002
+                 LIMIT(10)-                                             00070001
+                 NOSCRATCH-                                             00080001
+                 NOEMPTY)                                               00090001
+//STEP02   EXEC PGM=IDCAMS                                              00100001
+//SYSPRINT DD SYSOUT=*                                                  00110001
+//SYSOUT   DD SYSOUT=*                                                  00120001
+//SYSIN    DD *                                                         00130001
+     DEFINE GDG(NAME(TECN347.PROJECT.INP2AGT.GDG)-                      00140002
+                 LIMIT(10)-                                             00150001
+                 NOSCRATCH-                                             00160001
+                 NOEMPTY)                                               00170001
+//STEP03   EXEC PGM=IDCAMS                                              00180001
+//SYSPRINT DD SYSOUT=*                                                  00190001
+//SYSOUT   DD SYSOUT=*                                                  00200001
+//SYSIN    DD *                                                         00210001
+     DEFINE GDG(NAME(TECN347.PROJECT.MEDICAL.INP.GDG)-                  00220001
+                 LIMIT(10)-                                             00230001
+                 NOSCRATCH-                                             00240001
+                 NOEMPTY)                                               00250001
+//STEP04   EXEC PGM=IDCAMS                                              00260001
+//SYSPRINT DD SYSOUT=*                                                  00270001
+//SYSOUT   DD SYSOUT=*                                                  00280001
+//SYSIN    DD *                                                         00290001
+    DEFINE GDG(NAME(TECN347.PROJECT.KSDS.MASTER.OUT.GDG)-               00300003
+                    LIMIT(10)-                                          00310001
+                    NOSCRATCH-                                          00320001
+                    NOEMPTY)                                            00330001
+//STEP05   EXEC PGM=IDCAMS                                              00340001
+//SYSPRINT DD SYSOUT=*                                                  00350001
+//SYSOUT   DD SYSOUT=*                                                  00360001
+//SYSIN    DD *                                                         00370001
+    DEFINE GDG(NAME(TECN347.PROJECT.ERAGT.OUT.GDG)-                     00380001
+                    LIMIT(10)-                                          00390001
+                    NOSCRATCH-                                          00400001
+                    NOEMPTY)                                            00410001
+//STEP06   EXEC PGM=IDCAMS                                              00420001
+//SYSPRINT DD SYSOUT=*                                                  00430001
+//SYSOUT   DD SYSOUT=*                                                  00440001
+//SYSIN    DD *                                                         00450001
+    DEFINE GDG(NAME(TECN347.PROJECT.ERPOL.OUT.GDG)-                     00460001
+                    LIMIT(10)-                                          00470001
+                    NOSCRATCH-                                          00480001
+                    NOEMPTY)                                            00490001
+
