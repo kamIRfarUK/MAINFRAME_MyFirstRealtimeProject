@@ -1,0 +1,571 @@
+       IDENTIFICATION DIVISION.                                         00010000
+       PROGRAM-ID. COBOL01.                                             00020001
+      ******************************************************************00030000
+      ******************************************************************00040000
+      *                PROGRAM DESCRIPTION                             *00050000
+      ******************************************************************00060000
+      *   THIS PROGRAM READS THE MEDICAL INSURANCE FILE AND AGENT      *00070000
+      *   DETAIL FILE AND LOAD IT INTO INSURANCE POLICY DATABASE AND   *00080000
+      *   AGENT DETAIL DATABASE RESPECTIVELY.                          *00090000
+      ******************************************************************00100000
+      *   AUTHOR         :KAMIR FARUK       (2308017)                  *00110011
+      *                                                                *00120011
+      *                                                                *00130011
+      *                                                                *00140011
+      *   DATE-WRITTEN   :01-05-2024                                   *00150011
+      *   DATE-COMPILED  :01-05-2024                                   *00160011
+      ******************************************************************00170000
+      ******************************************************************00180000
+       ENVIRONMENT DIVISION.                                            00190000
+       INPUT-OUTPUT SECTION.                                            00200000
+       FILE-CONTROL.                                                    00210000
+      *************SELECT STATEMENT FOR MEDICAL INPUT FILE************* 00220000
+             SELECT INPFILE1 ASSIGN TO DD1                              00230000
+             ORGANIZATION IS SEQUENTIAL                                 00240000
+             ACCESS MODE IS SEQUENTIAL                                  00250000
+             FILE STATUS IS WS-FS1.                                     00260000
+      *************SELECT STATEMENT FOR AGENT INPUT FILE****************00270000
+             SELECT INPFILE2 ASSIGN TO DD2                              00280000
+             ORGANIZATION IS SEQUENTIAL                                 00290000
+             ACCESS MODE IS SEQUENTIAL                                  00300000
+             FILE STATUS IS WS-FS2.                                     00310000
+      *************SELECT STATEMENT FOR MASTER VSAM FILE*************** 00320000
+             SELECT OUTFILE1 ASSIGN TO DD3                              00330000
+             ORGANIZATION IS INDEXED                                    00340000
+             ACCESS MODE IS SEQUENTIAL                                  00350000
+             RECORD KEY IS KS-POLICY-ID                                 00360000
+             FILE STATUS IS WS-FS3.                                     00370000
+      *************SELECT STATEMENT FOR ERROR MEDICAL FILE************* 00380000
+             SELECT OUTFILE2 ASSIGN TO DD4                              00390000
+             ORGANIZATION IS SEQUENTIAL                                 00400000
+             ACCESS MODE IS SEQUENTIAL                                  00410000
+             FILE STATUS IS WS-FS4.                                     00420000
+      *************SELECT STATEMENT FOR ERROR AGENT FILE*************** 00430000
+             SELECT OUTFILE3 ASSIGN TO DD5                              00440000
+             ORGANIZATION IS SEQUENTIAL                                 00450000
+             ACCESS MODE IS SEQUENTIAL                                  00460000
+             FILE STATUS IS WS-FS5.                                     00470000
+      ******************************************************************00480000
+      ******************************************************************00490000
+       DATA DIVISION.                                                   00500000
+       FILE SECTION.                                                    00510000
+      ****************FILE DECLARATION FOR MEDICAL PS FILE**************00520000
+       FD INPFILE1.                                                     00530000
+       01 REC1.                                                         00540000
+         05 POLICY-ID   PIC X(5).                                       00550000
+         05 FILLER      PIC X.                                          00560000
+         05 POLICY-CODE PIC X(10).                                      00570000
+         05 FILLER      PIC X.                                          00580000
+         05 POLICY-NAME PIC X(25).                                      00590000
+         05 FILLER      PIC X.                                          00600000
+         05 POLICY-TYPE PIC X(10).                                      00610000
+         05 FILLER      PIC X.                                          00620000
+         05 POLICY-TERM PIC X(7).                                       00630000
+         05 FILLER      PIC X.                                          00640000
+         05 POLICY-AMNT PIC 9(10).                                      00650000
+         05 FILLER      PIC X(08).                                      00660000
+      ***************FILE DECLARATION FOR AGENT PS FILE*****************00670000
+       FD INPFILE2.                                                     00680000
+       01 REC2.                                                         00690000
+         05 AGENT-CODE  PIC X(5).                                       00700000
+         05 FILLER      PIC X.                                          00710000
+         05 AGENT-NAME  PIC X(10).                                      00720000
+         05 FILLER      PIC X.                                          00730000
+         05 STREET      PIC X(20).                                      00740000
+         05 FILLER      PIC X.                                          00750000
+         05 CITY        PIC X(20).                                      00760000
+         05 FILLER      PIC X.                                          00770000
+         05 STATE       PIC X(20).                                      00780000
+         05 FILLER      PIC X.                                          00790000
+         05 PIN         PIC 9(06).                                      00800000
+         05 FILLER      PIC X.                                          00810000
+         05 PHONE-NO    PIC X(10).                                      00820000
+         05 FILLER      PIC X.                                          00830000
+         05 REGN-NO     PIC X(15).                                      00840000
+         05 FILLER      PIC X.                                          00850000
+         05 COMMISSION  PIC 9(02).                                      00860000
+         05 FILLER      PIC X(34).                                      00870000
+      *************FILE DECLARATION FOR KSDS FILE***********************00880000
+       FD OUTFILE1.                                                     00890000
+       01 REC3.                                                         00900000
+         05 KS-POLICY-ID   PIC X(5).                                    00910000
+         05 FILLER         PIC X.                                       00920000
+         05 KS-POLICY-CODE PIC X(10).                                   00930000
+         05 FILLER         PIC X.                                       00940000
+         05 KS-POLICY-TYPE PIC X(10).                                   00950000
+         05 FILLER         PIC X(53).                                   00960000
+      ************FILE DECLARATION FOR ERROR MEDICAL FILE***************00970000
+       FD OUTFILE2.                                                     00980000
+       01 REC4.                                                         00990000
+         05 ER-POLICY-ID   PIC X(5).                                    01000000
+         05 FILLER         PIC X.                                       01010000
+         05 ER-POLICY-CODE PIC X(10).                                   01020000
+         05 FILLER         PIC X.                                       01030000
+         05 ER-POLICY-NAME PIC X(25).                                   01040000
+         05 FILLER         PIC X.                                       01050000
+         05 ER-POLICY-TYPE PIC X(10).                                   01060000
+         05 FILLER         PIC X.                                       01070000
+         05 ER-POLICY-TERM PIC X(7).                                    01080000
+         05 FILLER         PIC X.                                       01090000
+         05 ER-POLICY-AMNT PIC 9(10).                                   01100000
+         05 FILLER         PIC X.                                       01110000
+         05 ER-MED-FIELD   PIC X(15).                                   01120000
+         05 FILLER         PIC X(32).                                   01130000
+      ************FILE DECLARATION FOR ERROR AGENT FILE*****************01140000
+       FD OUTFILE3.                                                     01150000
+       01 REC5.                                                         01160000
+         05 ER-AGENT-CODE  PIC X(5).                                    01170000
+         05 FILLER         PIC X.                                       01180000
+         05 ER-AGENT-NAME  PIC X(10).                                   01190000
+         05 FILLER         PIC X.                                       01200000
+         05 ER-STREET      PIC X(20).                                   01210000
+         05 FILLER         PIC X.                                       01220000
+         05 ER-CITY        PIC X(20).                                   01230000
+         05 FILLER         PIC X.                                       01240000
+         05 ER-STATE       PIC X(20).                                   01250000
+         05 FILLER         PIC X.                                       01260000
+         05 ER-PIN         PIC 9(06).                                   01270000
+         05 FILLER         PIC X.                                       01280000
+         05 ER-PHONE-NO    PIC X(10).                                   01290000
+         05 FILLER         PIC X.                                       01300000
+         05 ER-REGN-NO     PIC X(15).                                   01310000
+         05 FILLER         PIC X.                                       01320000
+         05 ER-COMMISSION  PIC 9(02).                                   01330000
+         05 FILLER         PIC X.                                       01340000
+         05 ER-AGT-FIELD   PIC X(15).                                   01350000
+         05 FILLER         PIC X(28).                                   01360000
+       WORKING-STORAGE SECTION.                                         01370000
+      ******************************************************************01380000
+           EXEC SQL INCLUDE SQLCA END-EXEC.                             01390000
+           EXEC SQL INCLUDE MEDIC END-EXEC.                             01400000
+           EXEC SQL INCLUDE AGENT END-EXEC.                             01410001
+      ***********************WS FILE STATUS*****************************01420000
+       77 WS-FS1           PIC   9(02).                                 01430000
+       88 WS-SUCCESS1      VALUE 00.                                    01440000
+       88 WS-EOF1          VALUE 10.                                    01450000
+      *                                                                 01460000
+       77 WS-FS2           PIC   9(02).                                 01470000
+       88 WS-SUCCESS2      VALUE 00.                                    01480000
+       88 WS-EOF2          VALUE 10.                                    01490000
+      *                                                                 01500000
+       77 WS-FS3           PIC   9(02).                                 01510000
+       88 WS-SUCCESS3      VALUE 00.                                    01520000
+       88 WS-EOF3          VALUE 10.                                    01530000
+      *                                                                 01540000
+       77 WS-FS4           PIC   9(02).                                 01550000
+       88 WS-SUCCESS4      VALUE 00.                                    01560000
+       88 WS-EOF4          VALUE 10.                                    01570000
+      *                                                                 01580000
+       77 WS-FS5           PIC   9(02).                                 01590000
+       88 WS-SUCCESS5      VALUE 00.                                    01600000
+       88 WS-EOF5          VALUE 10.                                    01610000
+      ******************************************************************01620000
+      **********************ERROR MSG OF SQLCODE************************01630000
+       01 WS-ERRMSG.                                                    01640000
+          05 WS-ERRMSG-LEN     PIC  S9(04) VALUE  560.                  01650000
+          05 WS-ERRMSG-TXT     PIC  X(80)  OCCURS 7 TIMES INDEXED BY    01660000
+                                                          WS-IND.       01670000
+       01 WS-ERRMSG-LINE-LEN   PIC  S9(09) VALUE  +80.                  01680000
+      ***********************WS VAR DECLARATION*************************01690000
+       01 WS-VAR.                                                       01700000
+          05  WS-POL-AMNT      PIC X(13).                               01710000
+          05  WS-AGT-PH        PIC X(12).                               01720000
+      ******************************************************************01730000
+       PROCEDURE DIVISION.                                              01740000
+       0000-MAIN-PARA.                                                  01750000
+              PERFORM 1000-INITIALIZE-PARA THRU                         01760000
+                      1000-INITIALIZE-PARA-EXIT.                        01770018
+              PERFORM 2000-PROCESS-PARA THRU                            01780000
+                      2000-PROCESS-PARA-EXIT.                           01790018
+              PERFORM 8000-CLOSE-PARA THRU                              01800000
+                      8000-CLOSE-PARA-EXIT.                             01810018
+              PERFORM 9000-TERMINATION-PARA THRU                        01820000
+                      9000-TERMINATION-PARA-EXIT.                       01830000
+       0000-MAIN-PARA-EXIT.                                             01840000
+              EXIT.                                                     01850000
+       1000-INITIALIZE-PARA.                                            01860000
+              DISPLAY 'INITIALIZED...'.                                 01870000
+       1000-INITIALIZE-PARA-EXIT.                                       01920000
+              EXIT.                                                     01930000
+       2000-PROCESS-PARA.                                               01940000
+              DISPLAY 'PROCESSING....'.                                 01950000
+              PERFORM 2100-OPEN-PARA THRU                               01960000
+                      2100-OPEN-PARA-EXIT.                              01970018
+              PERFORM 2200-READ-PARA THRU                               01980000
+                      2200-READ-PARA-EXIT.                              01990015
+       2000-PROCESS-PARA-EXIT.                                          02000000
+              EXIT.                                                     02010000
+       2100-OPEN-PARA.                                                  02020000
+              DISPLAY 'OPENING PARA'                                    02030015
+              DISPLAY 'OPENING MEDICAL FILE...'                         02040015
+      ******************OPEN MEDICAL PS FILE****************************02050000
+              OPEN INPUT INPFILE1                                       02060015
+              EVALUATE TRUE                                             02070000
+                WHEN WS-SUCCESS1                                        02080000
+                    DISPLAY 'MEDICAL FILE IS OPENED...'                 02090000
+                WHEN OTHER                                              02100000
+                    DISPLAY 'OPENING MEDICAL FILE FAILED: ' WS-FS1      02110000
+                    PERFORM 9000-TERMINATION-PARA THRU                  02120000
+                            9000-TERMINATION-PARA-EXIT                  02130019
+              END-EVALUATE.                                             02140000
+      ******************OPEN AGENT PS FILE******************************02150000
+              DISPLAY 'OPENING AGENT FILE...'                           02160015
+              OPEN INPUT INPFILE2                                       02170015
+              EVALUATE TRUE                                             02180000
+                WHEN WS-SUCCESS2                                        02190000
+                     DISPLAY 'AGENT FILE IS OPENED...'                  02200000
+                WHEN OTHER                                              02210000
+                     DISPLAY 'OPENING AGENT FILE FAILED: ' WS-FS2       02220000
+                     PERFORM 9000-TERMINATION-PARA THRU                 02230000
+                             9000-TERMINATION-PARA-EXIT                 02240019
+              END-EVALUATE.                                             02250000
+      ******************OPEN MASTER VSAM KSDS FILE**********************02260000
+              DISPLAY 'OPENING KSDS FILE...'                            02270015
+              OPEN OUTPUT OUTFILE1.                                     02280014
+              EVALUATE TRUE                                             02290000
+                WHEN WS-SUCCESS3                                        02300000
+                     DISPLAY 'POLICY MASTER FILE IS OPENED...'          02310000
+                WHEN OTHER                                              02320000
+                    DISPLAY 'OPENING POLICY MASTER FILE FAILED: ' WS-FS302330000
+                    PERFORM 9000-TERMINATION-PARA THRU                  02340000
+                            9000-TERMINATION-PARA-EXIT                  02350019
+              END-EVALUATE.                                             02360000
+      ******************OPEN ERROR MEDICAL FILE*************************02370000
+              DISPLAY 'OPENING ERROR-MEDICAL-FILE...'                   02380015
+              OPEN OUTPUT OUTFILE2                                      02390015
+              EVALUATE TRUE                                             02400000
+                WHEN WS-SUCCESS4                                        02410000
+                     DISPLAY 'ERROR MEDICAL FILE IS OPENED...'          02420000
+                WHEN OTHER                                              02430000
+                   DISPLAY 'OPENING ERROR MEDICAL FILE FAILED: ' WS-FS4 02440000
+                     PERFORM 9000-TERMINATION-PARA THRU                 02450000
+                             9000-TERMINATION-PARA-EXIT                 02460019
+              END-EVALUATE.                                             02470000
+      ********************OPEN ERROR AGENT FILE*************************02480000
+              DISPLAY 'OPENING ERROR-AGENT-FILE...'                     02490015
+              OPEN OUTPUT OUTFILE3                                      02500015
+              EVALUATE TRUE                                             02510000
+                WHEN WS-SUCCESS5                                        02520000
+                     DISPLAY 'ERROR AGENT FILE IS OPENED...'            02530000
+                WHEN OTHER                                              02540000
+                     DISPLAY 'OPENING ERROR AGENT FILE FAILED: ' WS-FS5 02550000
+                     PERFORM 9000-TERMINATION-PARA THRU                 02560000
+                             9000-TERMINATION-PARA-EXIT                 02570019
+              END-EVALUATE.                                             02580000
+       2100-OPEN-PARA-EXIT.                                             02590000
+              EXIT.                                                     02600000
+       2200-READ-PARA.                                                  02610000
+              DISPLAY 'READING PARA...'                                 02620015
+              DISPLAY 'READING MEDICAL FILE.'                           02630015
+      **********************READ MEDICAL FILE***************************02640000
+              PERFORM UNTIL WS-EOF1                                     02650000
+              READ INPFILE1                                             02660000
+                EVALUATE TRUE                                           02670015
+                WHEN WS-SUCCESS1                                        02680000
+                     DISPLAY 'MEDICAL FILE IS READ...'                  02690000
+                     PERFORM 2300-MEDVAL-PARA THRU                      02700000
+                             2300-MEDVAL-PARA-EXIT                      02710019
+                WHEN WS-EOF1                                            02720000
+                     DISPLAY 'END OF THE MEDICAL FILE...'               02730000
+                WHEN OTHER                                              02740000
+                     DISPLAY 'MEDICAL FILE READ IS FAILED: ' WS-FS1     02750000
+                      PERFORM 9000-TERMINATION-PARA THRU                02760000
+                              9000-TERMINATION-PARA-EXIT                02770019
+                END-EVALUATE                                            02780000
+              END-PERFORM.                                              02790000
+      *******************READ AGENT FILE********************************02800000
+              DISPLAY 'READING AGENT FILE.'                             02810015
+              PERFORM UNTIL WS-EOF2                                     02820000
+              READ INPFILE2                                             02830000
+              EVALUATE TRUE                                             02840000
+                WHEN WS-SUCCESS2                                        02850000
+                     DISPLAY 'AGENT FILE IS READ...'                    02860000
+                     PERFORM 2400-AGENTVAL-PARA THRU                    02870000
+                             2400-AGENTVAL-PARA-EXIT                    02880019
+                WHEN WS-EOF2                                            02890000
+                     DISPLAY 'END OF THE AGENT FILE...'                 02900000
+                WHEN OTHER                                              02910000
+                     DISPLAY 'AGENT FILE READ IS FAILED: ' WS-FS2       02920000
+                      PERFORM 9000-TERMINATION-PARA THRU                02930000
+                              9000-TERMINATION-PARA-EXIT                02940019
+                END-EVALUATE                                            02950000
+              END-PERFORM.                                              02960000
+       2200-READ-PARA-EXIT.                                             02970000
+              EXIT.                                                     02980000
+       2300-MEDVAL-PARA.                                                02990000
+      ******************MEDICAL VALIDATION PARA*************************03000000
+              DISPLAY 'TO CHECK VALIDATIONS FOR MEDICAL FILE.'          03010015
+              IF POLICY-ID   IS GREATER THAN SPACES AND                 03020000
+                 POLICY-ID(1:5)  IS NUMERIC AND                         03021002
+                 POLICY-CODE IS GREATER THAN SPACES AND                 03030000
+                 POLICY-CODE(1:3) IS ALPHABETIC AND                     03031002
+                 POLICY-CODE(4:6) IS NUMERIC AND                        03032002
+                 POLICY-CODE(10:1) IS ALPHABETIC AND                    03033002
+                 POLICY-NAME IS GREATER THAN SPACES AND                 03040000
+                 POLICY-NAME IS ALPHABETIC AND                          03041002
+                 POLICY-TYPE IS GREATER THAN SPACES AND                 03050000
+                 POLICY-TYPE IS EQUAL TO 'MEDICAL' AND                  03051002
+                 POLICY-TERM IS GREATER THAN SPACES AND                 03060000
+                 POLICY-AMNT IS GREATER THAN SPACES AND                 03061002
+                 POLICY-AMNT IS NUMERIC                                 03070000
+                   DISPLAY 'VALIDATION IS SUCCESSFULL...'               03080000
+                   PERFORM 2310-LOADMED-PARA THRU                       03090000
+                           2310-LOADMED-PARA-EXIT                       03100019
+              ELSE                                                      03110000
+                   DISPLAY 'MEDICAL VALIDATION IS NOT SUCCESSFULL.'     03120000
+                   PERFORM 2320-ERRMED-PARA THRU                        03130000
+                           2320-ERRMED-PARA-EXIT                        03140019
+              END-IF.                                                   03150000
+       2300-MEDVAL-PARA-EXIT.                                           03160000
+              EXIT.                                                     03170000
+       2310-LOADMED-PARA.                                               03180000
+      *******************MOVE FILE VAR TO HOST VAR**********************03190000
+              DISPLAY 'LOAD MEDICAL PARA'                               03200015
+              MOVE POLICY-ID     TO  MD-POLICY-ID                       03210015
+              MOVE POLICY-CODE   TO  MD-POLICY-CODE                     03220015
+              MOVE POLICY-NAME   TO  MD-POLICY-NAME                     03230015
+              MOVE POLICY-TYPE   TO  MD-POLICY-TYPE                     03240015
+              MOVE POLICY-TERM   TO  MD-POLICY-TERM                     03250015
+              MOVE POLICY-AMNT   TO  MD-POLICY-AMNT                     03260015
+              DISPLAY 'LOADED...'                                       03270015
+              MOVE POLICY-AMNT(1:1) TO WS-POL-AMNT(1:1)                 03280015
+              MOVE ',' TO WS-POL-AMNT(2:1)                              03290015
+              MOVE POLICY-AMNT(2:3) TO WS-POL-AMNT(3:3)                 03300015
+              MOVE ',' TO WS-POL-AMNT(6:1)                              03310015
+              MOVE POLICY-AMNT(5:3) TO WS-POL-AMNT(7:3)                 03320015
+              MOVE ',' TO WS-POL-AMNT(10:1)                             03330015
+              MOVE POLICY-AMNT(8:3) TO WS-POL-AMNT(11:3)                03340015
+              MOVE WS-POL-AMNT TO MD-POLICY-AMNT                        03350015
+              DISPLAY "WS-POLICY-AMNT = " WS-POL-AMNT                   03360015
+      ***************INSERT INTO POLICY TABLE************************** 03370000
+              EXEC SQL                                                  03380000
+                  INSERT INTO INSURANCE_POLICY VALUES(:MD-POLICY-ID,    03390000
+                               :MD-POLICY-CODE, :MD-POLICY-NAME,        03400000
+                               :MD-POLICY-TYPE, :MD-POLICY-TERM,        03410000
+                               :MD-POLICY-AMNT)                         03420000
+              END-EXEC.                                                 03430017
+              DISPLAY SQLCODE                                           03440015
+              EVALUATE TRUE                                             03450000
+              WHEN SQLCODE = 00                                         03460000
+                DISPLAY 'INSERTING DATA TO POLICY TABLE.'               03470000
+                PERFORM 2330-LOADKS-PARA THRU 2330-LOADKS-PARA-EXIT     03480019
+              WHEN SQLCODE = -803                                       03490000
+                      DISPLAY 'DUPLICATE RECORDS FOUND'                 03500000
+                       MOVE POLICY-ID   TO ER-POLICY-ID                 03510000
+                       MOVE POLICY-CODE TO ER-POLICY-CODE               03520000
+                       MOVE POLICY-NAME TO ER-POLICY-NAME               03530000
+                       MOVE POLICY-TYPE TO ER-POLICY-TYPE               03540000
+                       MOVE POLICY-TERM TO ER-POLICY-TERM               03550000
+                       MOVE POLICY-AMNT TO ER-POLICY-AMNT               03560000
+                       MOVE 'DUPLICATE REC' TO ER-MED-FIELD             03570000
+                       DISPLAY REC4                                     03571007
+                       WRITE REC4                                       03580007
+                       DISPLAY 'DUPLICATES MOVED SUCCESSFULLY'          03590006
+              WHEN OTHER                                                03600000
+                       DISPLAY 'INSERTION FAILED.' SQLCODE              03610000
+                       PERFORM 9999-ERR-PARA THRU                       03620000
+                               9999-ERR-PARA-EXIT                       03630019
+              END-EVALUATE.                                             03640000
+      ******************************************************************03650000
+       2310-LOADMED-PARA-EXIT.                                          03660000
+              EXIT.                                                     03670000
+       2330-LOADKS-PARA.                                                03680000
+              DISPLAY 'LOAD KSDS'                                       03690015
+              MOVE SPACES TO REC3                                       03700015
+              MOVE POLICY-ID    TO  KS-POLICY-ID                        03710015
+              MOVE POLICY-CODE  TO  KS-POLICY-CODE                      03720015
+              MOVE POLICY-TYPE  TO  KS-POLICY-TYPE                      03730015
+              DISPLAY REC3                                              03731015
+              WRITE REC3                                                03740015
+              DISPLAY 'LOADED KSDS MASTER FILE...'.                     03750018
+       2330-LOADKS-PARA-EXIT.                                           03760000
+              EXIT.                                                     03770000
+       2320-ERRMED-PARA.                                                03780000
+              DISPLAY 'ERRMED PARA OPENED...'                           03790015
+      ****************CHECK FOR ERROR MEDICAL FIELD*********************03800000
+              IF POLICY-ID IS EQUAL TO SPACES OR                        03810002
+                 POLICY-ID IS NOT NUMERIC                               03811002
+                 MOVE 'ERROR IN ID' TO ER-MED-FIELD                     03820000
+              END-IF.                                                   03830000
+              IF POLICY-CODE IS EQUAL TO SPACES OR                      03840002
+                 POLICY-CODE(1:3) IS NOT ALPHABETIC OR                  03841002
+                 POLICY-CODE(4:6) IS NOT NUMERIC OR                     03842015
+                 POLICY-CODE(10:1) IS NOT ALPHABETIC                    03843002
+                 MOVE 'ERROR IN CODE' TO ER-MED-FIELD                   03850000
+              END-IF.                                                   03860000
+              IF POLICY-NAME IS EQUAL TO SPACES OR                      03870002
+                 POLICY-NAME IS NOT ALPHABETIC                          03871002
+                 MOVE 'ERROR IN NAME' TO ER-MED-FIELD                   03880000
+              END-IF.                                                   03890000
+              IF POLICY-TYPE IS EQUAL TO SPACES OR                      03900008
+                 POLICY-TYPE IS NOT EQUAL TO 'MEDICAL'                  03901002
+                 MOVE 'ERROR IN TYPE' TO ER-MED-FIELD                   03910000
+              END-IF.                                                   03920000
+              IF POLICY-TERM IS EQUAL TO SPACES                         03930000
+                 MOVE 'ERROR IN TERM' TO ER-MED-FIELD                   03940000
+              END-IF.                                                   03950000
+              IF POLICY-AMNT IS EQUAL TO SPACES OR                      03960010
+                 POLICY-AMNT IS NOT NUMERIC                             03961002
+                 MOVE 'ERROR IN AMNT' TO ER-MED-FIELD                   03970000
+              END-IF.                                                   03980000
+      ***********MOVE MEDICAL INPUT TO ERROR MED FILE*******************03990000
+              MOVE POLICY-ID   TO ER-POLICY-ID                          04000015
+              MOVE POLICY-CODE TO ER-POLICY-CODE                        04010015
+              MOVE POLICY-NAME TO ER-POLICY-NAME                        04020015
+              MOVE POLICY-TYPE TO ER-POLICY-TYPE                        04030015
+              MOVE POLICY-TERM TO ER-POLICY-TERM                        04040015
+              MOVE POLICY-AMNT TO ER-POLICY-AMNT                        04050015
+              DISPLAY 'ERROR MEDICAL RECORD MOVED...'                   04060015
+              DISPLAY REC4                                              04070015
+              WRITE REC4.                                               04080000
+       2320-ERRMED-PARA-EXIT.                                           04090000
+              EXIT.                                                     04100000
+      *******************AGENT VALIDATION PARA************************* 04110000
+       2400-AGENTVAL-PARA.                                              04120000
+              DISPLAY 'AGENTVAL PARA...'                                04130015
+              IF AGENT-CODE IS GREATER THAN SPACES AND                  04140000
+                 AGENT-CODE(1:4) IS NUMERIC AND                         04141002
+                 AGENT-CODE(5:1) IS ALPHABETIC AND                      04142002
+                 AGENT-NAME IS GREATER THAN SPACES AND                  04150000
+                 AGENT-NAME IS ALPHABETIC AND                           04151002
+                 STREET     IS GREATER THAN SPACES AND                  04160000
+                 CITY       IS GREATER THAN SPACES AND                  04170000
+                 CITY       IS ALPHABETIC AND                           04171002
+                 STATE      IS GREATER THAN SPACES AND                  04180000
+                 STATE      IS ALPHABETIC AND                           04181002
+                 PIN        IS GREATER THAN SPACES AND                  04190002
+                 PIN        IS NUMERIC AND                              04191002
+                 PHONE-NO   IS GREATER THAN SPACES AND                  04200000
+                 PHONE-NO   IS NUMERIC AND                              04201002
+                 REGN-NO    IS GREATER THAN SPACES AND                  04210000
+                 REGN-NO(1:5) IS ALPHABETIC AND                         04211002
+                 REGN-NO(6:10) IS NUMERIC AND                           04212004
+                 COMMISSION IS GREATER THAN SPACES AND                  04213002
+                 COMMISSION IS NUMERIC                                  04220000
+                 DISPLAY 'VALIDATION IS SUCESSFUL'                      04230000
+                 PERFORM 2410-LOADAGT-PARA THRU 2410-LOADAGT-PARA-EXIT  04240019
+              ELSE                                                      04250000
+                 DISPLAY 'VALIDATION NOT SUCESS'                        04260000
+                 PERFORM 2420-ERRAGT-PARA THRU 2420-ERRAGT-PARA-EXIT    04270019
+              END-IF.                                                   04280000
+       2400-AGENTVAL-PARA-EXIT.                                         04290000
+              EXIT.                                                     04300000
+       2410-LOADAGT-PARA.                                               04310000
+      ***************MOVE FILE VAR TO HOST VAR**************************04320000
+              MOVE AGENT-CODE TO AG-AGENT-CODE                          04330000
+              MOVE AGENT-NAME TO AG-AGENT-NAME                          04340000
+              MOVE STREET TO AG-STREET                                  04350000
+              MOVE CITY TO AG-CITY                                      04360000
+              MOVE STATE TO AG-STATE                                    04370000
+              MOVE PIN TO AG-PIN                                        04380000
+              MOVE PHONE-NO(1:2) TO WS-AGT-PH(1:2)                      04390015
+              MOVE '-' TO WS-AGT-PH(3:1)                                04400015
+              MOVE PHONE-NO(3:4) TO WS-AGT-PH(4:4)                      04410015
+              MOVE '-' TO WS-AGT-PH(8:1)                                04420015
+              MOVE PHONE-NO(7:4) TO WS-AGT-PH(9:4)                      04430015
+              MOVE WS-AGT-PH TO AG-PHONE-NO                             04440015
+              MOVE REGN-NO TO AG-REGN-NO                                04450000
+              MOVE COMMISSION TO AG-COMMISSION                          04460000
+      *******************INSERT INTO AGENT TABLE************************04470000
+              EXEC SQL                                                  04480000
+               INSERT INTO AGENT_DETAIL VALUES(:AG-AGENT-CODE,          04490000
+               :AG-AGENT-NAME,:AG-STREET,:AG-CITY,:AG-STATE,            04500000
+               :AG-PIN,:AG-PHONE-NO,:AG-REGN-NO,:AG-COMMISSION)         04510000
+              END-EXEC.                                                 04520017
+              IF SQLCODE = 00 THEN                                      04530000
+                 DISPLAY 'INSERTED INTO THE TABLE SUCCESSFULLY'         04540000
+                ELSE IF                                                 04550017
+                      SQLCODE = -803 THEN                               04560000
+                      DISPLAY 'DUPLICATE RECORDS ARE PRESENT'           04570000
+                      MOVE AGENT-CODE TO ER-AGENT-CODE                  04580000
+                      MOVE AGENT-NAME TO ER-AGENT-NAME                  04590000
+                      MOVE STREET TO ER-STREET                          04600000
+                      MOVE CITY TO ER-CITY                              04610000
+                      MOVE STATE TO ER-STATE                            04620000
+                      MOVE PIN TO ER-PIN                                04630000
+                      MOVE PHONE-NO TO ER-PHONE-NO                      04640000
+                      MOVE REGN-NO TO ER-REGN-NO                        04650000
+                      MOVE COMMISSION TO ER-COMMISSION                  04660000
+                      MOVE 'DUPLICATE REC' TO ER-AGT-FIELD              04670000
+                      DISPLAY REC5                                      04671009
+                      WRITE REC5                                        04680009
+                END-IF                                                  04700017
+              END-IF.                                                   04710000
+       2410-LOADAGT-PARA-EXIT.                                          04720000
+              EXIT.                                                     04730000
+       2420-ERRAGT-PARA.                                                04740000
+              MOVE SPACES TO REC5                                       04750015
+              DISPLAY 'IN ERROR AGENT PARA...'                          04760015
+              IF AGENT-CODE IS EQUAL TO SPACES OR                       04770002
+                 AGENT-CODE(1:4) IS NOT NUMERIC OR                      04771002
+                 AGENT-CODE(5:1) IS NOT ALPHABETIC                      04772002
+                 MOVE 'ERROR IN CODE' TO ER-AGT-FIELD                   04780000
+              END-IF.                                                   04790000
+              IF AGENT-NAME IS EQUAL TO SPACES OR                       04800002
+                 AGENT-NAME IS NOT ALPHABETIC                           04801002
+                 MOVE 'ERROR IN NAME' TO ER-AGT-FIELD                   04810000
+              END-IF.                                                   04820000
+              IF STREET EQUAL TO SPACES                                 04830000
+                 MOVE 'ERROR IN STREET' TO ER-AGT-FIELD                 04840000
+              END-IF.                                                   04850000
+              IF CITY IS EQUAL TO SPACES OR                             04860002
+                 CITY IS NOT ALPHABETIC                                 04861002
+                 MOVE 'ERROR IN CITY' TO ER-AGT-FIELD                   04870000
+              END-IF.                                                   04880000
+              IF STATE IS EQUAL TO SPACES OR                            04890002
+                 STATE IS NOT ALPHABETIC                                04891002
+                 MOVE 'ERROR IN STATE' TO ER-AGT-FIELD                  04900000
+              END-IF.                                                   04910000
+              IF PIN IS EQUAL TO SPACES OR                              04920012
+                 PIN IS NOT NUMERIC                                     04921002
+                 MOVE 'ERROR IN PIN' TO ER-AGT-FIELD                    04930000
+              END-IF.                                                   04940000
+              IF PHONE-NO IS EQUAL TO SPACES OR                         04950002
+                 PHONE-NO IS NOT NUMERIC                                04951002
+                 MOVE 'ERROR IN PHONE' TO ER-AGT-FIELD                  04960000
+              END-IF.                                                   04970000
+              IF REGN-NO IS EQUAL TO SPACES OR                          04980002
+                 REGN-NO(1:5) IS NOT ALPHABETIC OR                      04981002
+                 REGN-NO(6:10) IS NOT NUMERIC                           04982004
+                 MOVE 'ERROR IN REGN' TO ER-AGT-FIELD                   04990000
+              END-IF.                                                   05000000
+              IF COMMISSION IS EQUAL TO SPACES OR                       05010010
+                 COMMISSION IS NOT NUMERIC                              05011002
+                 MOVE 'ERROR IN COMM' TO ER-AGT-FIELD                   05020000
+              END-IF.                                                   05030000
+      ****************MOVE AGENT INPUT TO ERRAGT FILE*******************05040000
+              MOVE AGENT-CODE TO ER-AGENT-CODE                          05050015
+              MOVE AGENT-NAME TO ER-AGENT-NAME                          05060015
+              MOVE STREET TO ER-STREET                                  05070015
+              MOVE CITY TO ER-CITY                                      05080015
+              MOVE STATE TO ER-STATE                                    05090015
+              MOVE PIN TO ER-PIN                                        05100015
+              MOVE PHONE-NO TO ER-PHONE-NO                              05110015
+              MOVE REGN-NO TO ER-REGN-NO                                05120015
+              MOVE COMMISSION TO ER-COMMISSION                          05130015
+              DISPLAY REC5                                              05131015
+              WRITE REC5.                                               05140003
+       2420-ERRAGT-PARA-EXIT.                                           05160000
+              EXIT.                                                     05170000
+       8000-CLOSE-PARA.                                                 05180000
+      **************************CLOSE ALL FILES*************************05190000
+              DISPLAY 'CLOSING FILES...'                                05200015
+              CLOSE INPFILE1, INPFILE2, OUTFILE1, OUTFILE2,             05210000
+                    OUTFILE3.                                           05220000
+       8000-CLOSE-PARA-EXIT.                                            05230000
+              EXIT.                                                     05240000
+       9999-ERR-PARA.                                                   05250000
+              DISPLAY 'ERROR PARA'                                      05260015
+              CALL 'DSNTIAR' USING SQLCA, WS-ERRMSG, WS-ERRMSG-LINE-LEN 05270016
+              SET WS-IND TO 1                                           05280015
+              PERFORM UNTIL WS-IND > 7                                  05290000
+                DISPLAY WS-ERRMSG-TXT(WS-IND)                           05300000
+                SET WS-IND UP BY 1                                      05310000
+              END-PERFORM.                                              05320000
+       9999-ERR-PARA-EXIT.                                              05330000
+              EXIT.                                                     05340000
+       9000-TERMINATION-PARA.                                           05350000
+              STOP RUN.                                                 05360000
+       9000-TERMINATION-PARA-EXIT.                                      05370000
+              EXIT.                                                     05380000
+
