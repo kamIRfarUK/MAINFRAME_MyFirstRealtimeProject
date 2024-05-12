@@ -1,0 +1,31 @@
+                   MEDICAL INSURANCE DETAIL REPORT
+
+
+DATE :20240510                                PAGE :    01
+TIME :09:34:47                                REPORT ID:1001
+
+     POLICY ID     POLICY CODE  POLICY TYPE   POLICY TERM
+     ---------     --------     ---------     ----------
+     10111         MED100001Q   MEDICAL       QLY
+     10121         MED100003Q   MEDICAL       YEARLY
+     10127         MED100002Q   MEDICAL       MONTHLY
+     10200         MED100009Q   MEDICAL       QLY
+     10240         MED100001Q   MEDICAL       QLY
+
+     ***************END OF PAGE**************
+
+DATE :20240510                                PAGE :    02
+TIME :09:34:47                                REPORT ID:1001
+
+     POLICY ID     POLICY CODE  POLICY TYPE   POLICY TERM
+     ---------     --------     ---------     ----------
+     10243         MED100001Y   MEDICAL       YEARLY
+     10244         MED100001M   MEDICAL       MONTHLY
+     10248         MED100001X   MEDICAL       QLY
+     10252         MED100001Z   MEDICAL       YEARLY
+     10257         MED100001M   MEDICAL       MONTHLY
+
+     ***************END OF PAGE**************
+
+     ***************END OF REPORT**************
+
