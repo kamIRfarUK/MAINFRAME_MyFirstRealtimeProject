@@ -1,0 +1,15 @@
+//TECN347J JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),NOTIFY=&SYSUID         00010001
+//STEP01   EXEC PGM=IDCAMS                                              00020001
+//SYSPRINT DD SYSOUT=*                                                  00030001
+//SYSIN    DD *                                                         00040001
+       DEFINE CLUSTER(NAME(TECN347.PROJECT.KSDS)-                       00050001
+       TRACK(5,5)-                                                      00060001
+       RECORDSIZE(80,80)-                                               00070001
+       FREESPACE(10,10)-                                                00080001
+       CISZ(4096)-                                                      00090001
+       VOLUME(ZAPRD6)-                                                  00100002
+       KEYS(5,0)-                                                       00110001
+       REUSE-                                                           00120001
+       INDEXED)                                                         00130001
+/*                                                                      00140001
+
