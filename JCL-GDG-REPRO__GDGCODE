@@ -1,0 +1,73 @@
+//TECN347J JOB NOTIFY=&SYSUID                                           00010000
+//STEP01   EXEC PGM=IDCAMS                                              00020000
+//SYSPRINT DD SYSOUT=*                                                  00030001
+//SYSOUT   DD SYSOUT=*                                                  00031000
+//DD01     DD DSN=TECN347.PROJECT.INP1POL.PS,DISP=SHR                   00032001
+//DD02     DD DSN=TECN347.PROJECT.INP1POL.GDG(+1),                      00033003
+//            DISP=(NEW,CATLG,DELETE),                                  00033101
+//            SPACE=(TRK,(2,2)),                                        00034000
+//            DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)                       00035004
+//SYSIN    DD *                                                         00036000
+     REPRO INFILE(DD01)-                                                00037000
+           OUTFILE(DD02)                                                00038000
+/*                                                                      00038100
+//STEP02   EXEC PGM=IDCAMS                                              00039000
+//SYSPRINT DD SYSOUT=*                                                  00039100
+//SYSOUT   DD SYSOUT=*                                                  00039200
+//DD03     DD DSN=TECN347.PROJECT.MEDICAL.PS,DISP=SHR                   00039301
+//DD04     DD DSN=TECN347.PROJECT.MEDICAL.INP.GDG(+1),                  00039401
+//            DISP=(NEW,CATLG,DELETE),                                  00039501
+//  SPACE=(TRK,(2,2)),DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)               00039600
+//SYSIN    DD *                                                         00039700
+     REPRO INFILE(DD03)-                                                00039800
+           OUTFILE(DD04)                                                00039900
+/*                                                                      00040000
+//STEP03   EXEC PGM=IDCAMS                                              00040100
+//SYSPRINT DD SYSOUT=*                                                  00040200
+//SYSOUT   DD SYSOUT=*                                                  00040300
+//DD05     DD DSN=TECN347.PROJECT.INP2AGT.PS,DISP=SHR                   00040403
+//DD06     DD DSN=TECN347.PROJECT.INP2AGT.GDG(+1),                      00040503
+//            DISP=(NEW,CATLG,DELETE),                                  00040601
+//            SPACE=(TRK,(2,2)),                                        00040700
+//            DCB=(RECFM=FB,LRECL=150,BLKSIZE=1500)                     00040800
+//SYSIN    DD *                                                         00040900
+     REPRO INFILE(DD05)-                                                00041000
+           OUTFILE(DD06)                                                00041100
+/*                                                                      00041200
+//STEP04   EXEC PGM=IDCAMS                                              00042000
+//SYSPRINT DD SYSOUT=*                                                  00050000
+//SYSOUT   DD SYSOUT=*                                                  00060000
+//DD07     DD DSN=TECN347.PROJECT.KSDS,DISP=SHR                         00070001
+//DD08     DD DSN=TECN347.PROJECT.KSDS.MASTER.OUT.GDG(+1),              00080003
+//            DISP=(NEW,CATLG,DELETE),                                  00081001
+//            SPACE=(TRK,(2,2)),                                        00090000
+//            DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)                       00100000
+//SYSIN    DD *                                                         00110000
+     REPRO INFILE(DD07)-                                                00120000
+           OUTFILE(DD08)                                                00130000
+/*                                                                      00131000
+//STEP05   EXEC PGM=IDCAMS                                              00140000
+//SYSPRINT DD SYSOUT=*                                                  00150000
+//SYSOUT   DD SYSOUT=*                                                  00160000
+//DD09     DD DSN=TECN347.PROJECT.ERAGT.PS,DISP=SHR                     00170001
+//DD10     DD DSN=TECN347.PROJECT.ERAGT.OUT.GDG(+1),                    00180001
+//            DISP=(NEW,CATLG,DELETE),                                  00181001
+//            SPACE=(TRK,(2,2)),                                        00190000
+//            DCB=(RECFM=FB,LRECL=160,BLKSIZE=1600)                     00200000
+//SYSIN    DD *                                                         00210000
+     REPRO INFILE(DD09)-                                                00220000
+           OUTFILE(DD10)                                                00230000
+/*                                                                      00231000
+//STEP06   EXEC PGM=IDCAMS                                              00240000
+//SYSPRINT DD SYSOUT=*                                                  00250000
+//SYSOUT   DD SYSOUT=*                                                  00260000
+//DD11     DD DSN=TECN347.PROJECT.ERPOL.PS,DISP=SHR                     00270002
+//DD12     DD DSN=TECN347.PROJECT.ERPOL.OUT.GDG(+1),                    00280002
+//            DISP=(NEW,CATLG,DELETE),                                  00281002
+//            SPACE=(TRK,(2,2)),                                        00290000
+//            DCB=(RECFM=FB,LRECL=120,BLKSIZE=1200)                     00300000
+//SYSIN    DD *                                                         00310000
+     REPRO INFILE(DD11)-                                                00320000
+           OUTFILE(DD12)                                                00330000
+/*                                                                      00340000
+
