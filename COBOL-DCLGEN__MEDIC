@@ -1,0 +1,38 @@
+      ******************************************************************
+      * DCLGEN TABLE(INSURANCE_POLICY)                                 *
+      *        LIBRARY(TECN347.PROJECT.DCLGEN(MEDIC))                  *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(MD-)                                              *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE INSURANCE_POLICY TABLE
+           ( POLICY_ID                      CHAR(5) NOT NULL,
+             POLICY_CODE                    CHAR(10),
+             POLICY_NAME                    CHAR(25),
+             POLICY_TYPE                    CHAR(10),
+             POLICY_TERM                    CHAR(7),
+             POLICY_AMNT                    CHAR(13)
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE INSURANCE_POLICY                   *
+      ******************************************************************
+       01  DCLINSURANCE-POLICY.
+      *                       POLICY_ID
+           10 MD-POLICY-ID         PIC X(5).
+      *                       POLICY_CODE
+           10 MD-POLICY-CODE       PIC X(10).
+      *                       POLICY_NAME
+           10 MD-POLICY-NAME       PIC X(25).
+      *                       POLICY_TYPE
+           10 MD-POLICY-TYPE       PIC X(10).
+      *                       POLICY_TERM
+           10 MD-POLICY-TERM       PIC X(7).
+      *                       POLICY_AMNT
+           10 MD-POLICY-AMNT       PIC X(13).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 6       *
+      ******************************************************************
+
