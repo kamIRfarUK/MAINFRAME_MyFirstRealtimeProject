@@ -1,0 +1,66 @@
+//TECN347J JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),NOTIFY=&SYSUID         00020003
+//***********************PRE-DELETION***********************************00021004
+//STEP01   EXEC PGM=IEFBR14                                             00030001
+//DD1      DD DSN=TECN347.PROJECT.MEDICAL.PS,                           00040002
+//            DISP=(MOD,DELETE,DELETE),                                 00041002
+//            SPACE=(TRK,(2,2),RLSE),                                   00050001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00060001
+//DD2      DD DSN=TECN347.PROJECT.LIFE.PS,                              00070002
+//            DISP=(MOD,DELETE,DELETE),                                 00071002
+//            SPACE=(TRK,(2,2),RLSE),                                   00080001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00090001
+//DD3      DD DSN=TECN347.PROJECT.CHILD.PS,                             00100002
+//            DISP=(MOD,DELETE,DELETE),                                 00101002
+//            SPACE=(TRK,(2,2),RLSE),                                   00110001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00120001
+//DD4      DD DSN=TECN347.PROJECT.PROPERTY.PS,                          00130002
+//            DISP=(MOD,DELETE,DELETE),                                 00131002
+//            SPACE=(TRK,(2,2),RLSE),                                   00140001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00150001
+//DD5      DD DSN=TECN347.PROJECT.TRAVEL.PS,                            00160002
+//            DISP=(MOD,DELETE,DELETE),                                 00161002
+//            SPACE=(TRK,(2,2),RLSE),                                   00170001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00180001
+//DD6      DD DSN=TECN347.PROJECT.MOTOR.PS,                             00190002
+//            DISP=(MOD,DELETE,DELETE),                                 00191002
+//            SPACE=(TRK,(2,2),RLSE),                                   00200001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00210001
+//********************SPLITTING INTO 6 FILES************************    00220001
+//STEP02   EXEC PGM=SORT                                                00230001
+//SYSPRINT DD SYSOUT=*                                                  00240001
+//SYSOUT   DD SYSOUT=*                                                  00250001
+//SORTIN   DD DSN=TECN347.PROJECT.INP1POL.PS,DISP=SHR                   00270001
+//SORTOF01 DD DSN=TECN347.PROJECT.MEDICAL.PS,                           00280001
+//            DISP=(NEW,CATLG,DELETE),                                  00281001
+//            SPACE=(TRK,(2,2),RLSE),                                   00290001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00300001
+//SORTOF02 DD DSN=TECN347.PROJECT.LIFE.PS,                              00310001
+//            DISP=(NEW,CATLG,DELETE),                                  00311001
+//            SPACE=(TRK,(2,2),RLSE),                                   00320001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00330001
+//SORTOF03 DD DSN=TECN347.PROJECT.CHILD.PS,                             00340001
+//            DISP=(NEW,CATLG,DELETE),                                  00341001
+//            SPACE=(TRK,(2,2),RLSE),                                   00350001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00360001
+//SORTOF04 DD DSN=TECN347.PROJECT.PROPERTY.PS,                          00370001
+//            DISP=(NEW,CATLG,DELETE),                                  00371001
+//            SPACE=(TRK,(2,2),RLSE),                                   00380001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00390001
+//SORTOF05 DD DSN=TECN347.PROJECT.TRAVEL.PS,                            00400001
+//            DISP=(NEW,CATLG,DELETE),                                  00401001
+//            SPACE=(TRK,(2,2),RLSE),                                   00410001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00420001
+//SORTOF06 DD DSN=TECN347.PROJECT.MOTOR.PS,                             00430001
+//            DISP=(NEW,CATLG,DELETE),                                  00431001
+//            SPACE=(TRK,(2,2),RLSE),                                   00440001
+//            DCB=(LRECL=80,RECFM=FB,BLKSIZE=800)                       00450001
+//SYSIN    DD *                                                         00460001
+        SORT FIELDS=COPY                                                00470001
+        OUTFIL FILES=01,INCLUDE=(44,10,CH,EQ,C'MEDICAL')                00480001
+        OUTFIL FILES=02,INCLUDE=(44,10,CH,EQ,C'LIFE')                   00490001
+        OUTFIL FILES=03,INCLUDE=(44,10,CH,EQ,C'CHILD')                  00500001
+        OUTFIL FILES=04,INCLUDE=(44,10,CH,EQ,C'PROPERTY')               00510001
+        OUTFIL FILES=05,INCLUDE=(44,10,CH,EQ,C'TRAVEL')                 00520001
+        OUTFIL FILES=06,INCLUDE=(44,10,CH,EQ,C'MOTOR')                  00530001
+/*                                                                      00540001
+
