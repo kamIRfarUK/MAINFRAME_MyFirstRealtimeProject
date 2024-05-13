@@ -50,8 +50,8 @@ LAYOUT REPORT:
 *****************************************************************************************************************************************************************
                                                            MEDICAL INSURANCE DETAIL REPORT
 
-DATE : CCYYMMDD                                                                                                                         Page : 1  
-Time : HH:MM:SS                                                                                                                         Report ID:1001                                                                                                                                                                
+DATE : CCYYMMDD                                                                                                   Page : 1  
+Time : HH:MM:SS                                                                                                   Report ID:1001                                                                                                                                                                
 
 POLICY ID                POLICY CODE                 POLICY TYPE          TERM       
 -------------------              -- ------------              ------------           --------------
@@ -60,8 +60,8 @@ POLICY ID                POLICY CODE                 POLICY TYPE          TERM
 
 
    ---------------------------------       End of Page ---------------------------------
-                                                                                                                                                 Page:2
-                                                                                                                                                Report ID:1001  
+                                                                                                                   Page:2
+                                                                                                                   Report ID:1001  
 
 POLICY ID                POLICY CODE                 POLICY TYPE          TERM       
 -------------------              -- ------------              ------------           --------------
@@ -70,12 +70,10 @@ POLICY ID                POLICY CODE                 POLICY TYPE          TERM
 
 
 
-   -----------------------------       End of Page ---------------------------------
-
-
-
-                                                                                                                                                 Page:3
-                                                                                                                                                Report ID:1001  
+   -----------------------------       End of Page -----------------------------------                                              
+   
+                                                                                                                   Page:3
+                                                                                                                   Report ID:1001                                                                                                                            
 
 POLICY ID                POLICY CODE                 POLICY TYPE          TERM       
 -------------------              -- ------------              ------------           --------------
