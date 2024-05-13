@@ -49,8 +49,9 @@ Note:
 LAYOUT REPORT:
 *****************************************************************************************************************************************************************
                                                            MEDICAL INSURANCE DETAIL REPORT
+							   
 
-DATE : CCYYMMDD                                                                                                   Page : 1  
+DATE : CCYYMMDD													  Page : 1  
 Time : HH:MM:SS                                                                                                   Report ID:1001                                                                                                                                                                
 
 POLICY ID                POLICY CODE                 POLICY TYPE          TERM       
